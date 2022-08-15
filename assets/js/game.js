@@ -75,47 +75,79 @@ var fightOrSkip = function() {
     }; 
 
 var fight = function(enemy) {
-  console.log(enemy);
-  //repeat and execute as long as the enemy robot is alive
+  // keep track of who goes first
+  var isPlayerTurn = true;
+
+  // randomly change turn order
+  if (Math.random() > 0.5) {
+    isPlayerTurn = false;
+  }
+
   while (playerInfo.health > 0 && enemy.health > 0) {
-    fightOrSkip();
-  
-  //subtract the calue of `playerInfo.attack` from the value of `enemy.health` and use that result to update the value in the `enemy.health` variable
-  var damage = randomNumber(playerInfo.attack -3, playerInfo.attack);
-  enemy.health = Math.max(0, enemy.health - damage);
-   
-  //log a resulting message to the console so that we know it worked.
-  console.log(
-    playerInfo.name + " attacked " + enemy.name + ". " + enemy.name + " now has " + enemy.health + " health remaining."
-  );
+    if (isPlayerTurn) {
+      // ask player if they'd like to fight or skip using fightOrSkip function
+      if (fightOrSkip()) {
+        // if true, leave fight by breaking loop
+        break;
+      }
 
-  //check enemy's health
-    if (enemy.health <= 0) {
-      window.alert(enemy.name + " did not survive your brutal attacks!");
+      var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
-      console.log(playerInfo.name + " current values are: Health=" + playerInfo.health + ", Money=" + playerInfo.money + ", Attack=" + playerInfo.attack + ".");
+      // remove enemy's health by subtracting the amount we set in the damage variable
+      enemy.health = Math.max(0, enemy.health - damage);
+      console.log(
+        playerInfo.name +
+          " attacked " +
+          enemy.name +
+          ". " +
+          enemy.name +
+          " now has " +
+          enemy.health +
+          " health remaining."
+      );
 
-      break;
+      // check enemy's health
+      if (enemy.health <= 0) {
+        window.alert(enemy.name + " has died!");
 
+        // award player money for winning
+        playerInfo.money = playerInfo.money + 20;
+
+        // leave while() loop since enemy is dead
+        break;
+      } else {
+        window.alert(enemy.name + " still has " + enemy.health + " health left.");
+      }
+      // player gets attacked first
     } else {
-      window.alert(enemy.name + " still has " + enemy.health + " health left.");
-    }
+      var damage = randomNumber(enemy.attack - 3, enemy.attack);
 
-  //subtract the value of `enemy.attack` from the value of `playerInfo.health` and use that result to update the value in the `playerInfo.health` variable.
-    var damage = randomNumber(enemy.attack -3, enemy.attack);
-    playerInfo.health = Math.max(0, playerInfo.health - damage);
+      // remove player's health by subtracting the amount we set in the damage variable
+      playerInfo.health = Math.max(0, playerInfo.health - damage);
+      console.log(
+        enemy.name +
+          " attacked " +
+          playerInfo.name +
+          ". " +
+          playerInfo.name +
+          " now has " +
+          playerInfo.health +
+          " health remaining."
+      );
 
-  //log a resulting message to the console so we know that it worked.
-    console.log(enemy.name + " attacked " + playerInfo.name + ". " + playerInfo.name + " now has " + playerInfo.health + " health remaining.");
-  
-    if (playerInfo.health <= 0) {
-      window.alert(playerInfo.name + "did not survive the brutal attacks of " + enemy.name + " .");
-      break;
-    } else {
-      window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+      // check player's health
+      if (playerInfo.health <= 0) {
+        window.alert(playerInfo.name + " has died!");
+        // leave while() loop if player is dead
+        break;
+      } else {
+        window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
       }
     }
-  };
+    // switch turn order for next round
+    isPlayerTurn = !isPlayerTurn;
+  }
+};
 
   // to start the game
   var startGame = function() {
