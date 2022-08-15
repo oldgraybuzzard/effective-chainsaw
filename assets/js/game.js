@@ -29,7 +29,7 @@ var playerInfo = {
         window.alert("You don't have enough money!");
       }
     },
-    upgradeattack: function() {
+    upgradeAttack: function() {
       if (this.money >= 7) {
         window.alert("Upgrading player's attack by 6 for 7 dollars.");
         this.attack += 6;
@@ -170,29 +170,21 @@ var fight = function(enemy) {
   //shop for perks
   var shop = function() {
     var shopOptionPrompt = window.prompt(
-      "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', 'LEAVE' to make a choice.");
+      "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please choose an option: 1 for 'REFILL', 2 for 'UPGRADE', 3 for 'LEAVE' to make a choice.");
       // use switch statments to carry out the prompt action
+      shopOptionPrompt = parseInt(shopOptionPrompt);
       switch (shopOptionPrompt) {
-        case "refill":
-        case "REFILL":
-        case "Refill":
+        case 1:
           playerInfo.refillHealth();
           break;
-        case "upgrade":
-        case "UPGRADE":
-        case "Upgrade":
+        case 2:
           playerInfo.upgradeAttack();
           break;
-        case "leave":
-        case "Leave":
-        case "LEAVE":
+        case 3:
           window.alert("Leaving the store.")
-
-          //do nothing, so function will end
           break;
         default:
           window.alert("You did not pick a valid option Try again.");
-
           //call shop() agian to force player to pick a valid option
           shop();
           break;
